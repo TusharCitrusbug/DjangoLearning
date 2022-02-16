@@ -4,6 +4,8 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('',login,name="login"),
-    path('',login_data,name="login_data"),
+    path('',home,name="home"),
+    path('registered_data/',registered_data,name="registered_data"),
+    path('login/',login,name="login"),
+
 ]

@@ -8,7 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-    <form action="{% url 'login_data' %}" method="post" id="login_form">
+    <form  method="post" id="registration_form">
         {% csrf_token %} 
      <P>
     <lable for="firstname">First name: </lable>
@@ -17,7 +17,7 @@
               <input type="text" id="email" name="eml"><BR>
                 <lable for="password">password: </lable>
     <input type="password" name="pswd" id="password">
-   <button type="submit" name="submit" >submit</button>
+   <button  type="submit" id="submit" name="submit" >submit</button>
     </P>
 </form>
 
@@ -25,12 +25,11 @@
 
 </div>
  <script>
-     $(document).on('click','#submit', function(e){
+     $('#registration_form').on('submit', function(e){
              e.preventDefault();
-
              $.ajax({
                  type: "POST",
-                 url:'{% url "login_data" %}',
+                 url:'{% url "registered_data" %}',
                  data: {
                      firstname : $('#firstname').val(),
                      Email : $('#email').val(),
