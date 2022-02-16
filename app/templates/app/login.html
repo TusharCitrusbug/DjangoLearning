@@ -8,11 +8,38 @@
 </head>
 <body>
     <form  id="login_form">
+        {% csrf_token %}
         <label for="email">Email :</label>
         <input type="email" name="eml" id="email">
         <label for="password">password :</label>
         <input type="password" name="pswd" id="password">
         <button type="submit">Login</button>
     </form>
+<div id="output">
+
+</div>
+    <script>
+        $('#login_form').on('submit', function(e){
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url:'{% url "registered_data" %}',
+                    data: {
+                        Email : $('#email').val(),
+                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                        password: $('#password').val(),
+                        
+                    },
+                    success: function(data){
+                      $('#output').html(data.msg) /* response message */
+                   },
+   
+                   error: function() {
+                       alert("Error while loading");
+                   }
+                });
+   
+        });
+    </script>
 </body>
 </html>

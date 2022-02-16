@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import JsonResponse
 from .models import *
 
@@ -11,7 +11,8 @@ def home(request):
     return render(request,'app/index.html')
 def login(request):
     return render(request,'app/login.html')
-
+def success(request):
+    return render(request,'app/success.html')
 # create operation 
   
 def registered_data(request):
@@ -37,4 +38,13 @@ def registered_data(request):
 # login page
 def login_fun(request):
     if request.method =='POST':
-        pass
+        data=login_data.objects.get(email=request.POST['Email'])
+
+        if data.email==request.POST['Email'] and data.password==request.POST['Email']:
+            print("login success")
+            return redirect(success)
+        else:
+            response = {
+                         'msg':'invalid cradentials' # response message
+            }
+            return JsonResponse(response)   
