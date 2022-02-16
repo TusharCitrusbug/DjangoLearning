@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <form action="{% url 'login_data' %}" method="post" id="login_form">
+        {% csrf_token %} 
+     <P>
+    <lable for="firstname">First name: </lable>
+              <input type="text" id="firstname" name="fname"><BR>
+    <lable for="email">email: </lable>
+              <input type="text" id="email" name="eml"><BR>
+                <lable for="password">password: </lable>
+    <input type="password" name="pswd" id="password">
+   <button type="submit" name="submit" >submit</button>
+    </P>
+</form>
+
+ <div id="output">
+
+</div>
+ <script>
+     $(document).on('click','#submit', function(e){
+             e.preventDefault();
+
+             $.ajax({
+                 type: "POST",
+                 url:'{% url "login_data" %}',
+                 data: {
+                     firstname : $('#firstname').val(),
+                     Email : $('#email').val(),
+                     csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                     password: $('#password').val(),
+                     
+                 },
+                 success: function(data){
+                   $('#output').html(data.msg) /* response message */
+                },
+
+                error: function() {
+                    alert("hekllklsd");
+                }
+             });
+
+     });
+ </script>
+</body>
+</html>
