@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form  method="post" id="update_form">
+        {% csrf_token %} 
+     <P>
+    <lable for="firstname">First name: </lable>
+              <input type="text" id="firstname" name="fname"><BR>
+    <lable for="email">email: </lable>
+              <input type="text" id="email" name="eml"><BR>
+                <lable for="password">password: </lable>
+    <input type="password" name="pswd" id="password">
+   <button  type="submit" id="submit" name="submit" >Update</button>
+    </P>
+</form>
+
+<div id="output">
+
+</div>
+
+
+<script>
+    $('#registration_form').on('submit', function(e){
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url:'{% url "update-fun" %}',
+                data: {
+                    firstname : $('#firstname').val(),
+                    Email : $('#email').val(),
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    
+                },
+                success: function(data){
+                  $('#output').html(data.msg);/* response message */
+                  $('#firstname').val(data.fname);
+                  $('#email').val(data.email);
+               },
+
+               error: function() {
+                   alert("Error while loading");
+               }
+            });
+
+    });
+</script>
+</body>
+</html>

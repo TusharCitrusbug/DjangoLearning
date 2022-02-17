@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.http import JsonResponse
-from .models import *
+from app.models import *
 
 default_data={}
 # Create your views here.
@@ -33,18 +33,87 @@ def registered_data(request):
                 password=password,
             )
 
+
             return JsonResponse(response) # return response as JSON
 
 # login page
 def login_fun(request):
-    if request.method =='POST':
-        data=login_data.objects.get(email=request.POST['Email'])
 
-        if data.email==request.POST['Email'] and data.password==request.POST['Email']:
-            print("login success")
-            return redirect(success)
-        else:
-            response = {
-                         'msg':'invalid cradentials' # response message
+    try:
+        if request.method =='POST':
+            data=login_data.objects.get(email=request.POST['Email'])
+            print(data)
+
+            if data.password==request.POST['password']:
+                
+                request.session['email']=request.POST['Email']
+                response = {
+                            'msg':'welcome to your account' ,
+
+                            'updating_form' : '''
+     
+    <lable for="firstname">First name: </lable>
+              <input type="text" id="firstname" name="fname" value=""><BR>
+    <lable for="email">email: </lable>
+              <input type="text" id="emailup" name="eml" disabled><BR>
+                
+   <button  type="submit" id="submit" name="submit" >Update</button>
+ 
+
+
+<div id="update_output">
+
+</div>
+<br>
+<div class="login_link">
+    <a href=" ">Login another account</a>
+</div>
+<div class="delete_link">
+    
+</div>
+    
+<br>
+
+    
+
+''',
+'data':{
+    "fname":data.name,
+    "email":data.email
+
+}
+                }
+                print("loginsuccess")
+                return JsonResponse(response) 
+            
+    except:
+        response = {
+                    'msg':'invalid cradentials' # response message
+                }
+        return JsonResponse(response)   
+
+
+def update_fun(request):
+    # del request.session['email']
+    if request.method =='POST':
+        data=login_data.objects.get(email=request.session['email'])
+        print(request.POST['Email'])
+        data.email=request.POST['Email']
+        data.name=request.POST['firstname']
+        data.save()
+        
+        request.session['email']=request.POST['Email']
+        print(f"session {request.session['email']}")
+        response = {
+                'data':{
+                    "fname":request.POST['firstname'],
+                    "email":request.POST['Email'],
+                    },
+                'msg':"updated successfully"
             }
-            return JsonResponse(response)   
+
+    return JsonResponse(response)   
+
+
+def delete_ac(request):
+    pass
